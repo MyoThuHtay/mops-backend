@@ -1,0 +1,8 @@
+# does not ignore the README.md file
+!README.md
+
+# ignores all under this line
+.env
+*.json
+node_modules
+

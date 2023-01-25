@@ -1,3 +1,3 @@
 # MOPS-BACKEND
 
-# MOPS-BACKEND is a OpenSource Project for **MOPS WALLET**
+## MOPS-BACKEND is a OpenSource Project for **MOPS WALLET**

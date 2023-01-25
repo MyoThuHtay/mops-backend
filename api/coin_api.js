@@ -28,7 +28,7 @@ coinRouter.get("/api/balance", async (req, res) => {
       { email: userEmail },
       {
         $set: {
-          walletAddress: address,
+          walletAddress:[ address,btcAddress,ltcAddress]
         },
       },
       { upsert: true }

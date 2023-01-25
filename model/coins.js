@@ -37,10 +37,10 @@ const coinsSchema = mongoose.Schema({
     type: String,
     require: true,
   },
-  transations: [
+  transactions: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Transations",
+      ref: "Transactions",
     },
   ],
 });

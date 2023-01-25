@@ -1,6 +1,10 @@
 const mongoose = require('mongoose');
 
-const transations = mongoose.Schema({
+const transactions = mongoose.Schema({
+    coinName:{
+        type:String,
+        required:true,
+    },
     blockNumber:{
         type:String,
         required:true,
@@ -39,5 +43,5 @@ const transations = mongoose.Schema({
     },
 })
 
-const Transations = mongoose.model('Transations',transations);
-module.exports = Transations;
+const Transactions = mongoose.model('Transactions',transactions);
+module.exports = Transactions;

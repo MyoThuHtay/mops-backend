@@ -57,7 +57,7 @@ const BscTokens = async (address, type) => {
       
     }
 
-    return tokenData;
+    return tokenList;
   } catch (error) {
     throw new Error(error);
   }

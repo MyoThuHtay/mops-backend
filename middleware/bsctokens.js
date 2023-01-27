@@ -3,20 +3,60 @@ const Token = require("../model/Token");
 
 const Moralis = require("moralis").default;
 
-const BscTokens = async (address,type) => {
-  const logo = "https://myothuhtay.github.io/assets/blockchains/smartchain/assets/";
-  // const ethTokenLogo = "https://myothuhtay.github.io/assets/blockchains/ethereum/assets/";
-  // const polygonTokenLogo = "https://myothuhtay.github.io/assets/blockchains/polygon/assets/";
+const BscTokens = async (address, type) => {
+  const logo =
+    "https://myothuhtay.github.io/assets/blockchains/smartchain/assets/";
   const chain = EvmChain.BSC;
-  //const defaultlogo = "https://myothuhtay.github.io/assets/blockchains/smartchain/assets/0x2fd38C1A195A0994944e302bE78D604D3a6cf22f/logo.png";
-
   try {
     let tokenList = [];
     const tokenData = await Moralis.EvmApi.token.getWalletTokenBalances({
       address,
       chain,
     });
-    return tokenData;
+    for (let i = 0; i < tokenData.raw.length; i++) {
+      let token = await Token.findOne({
+        contractAddress: tokenData.raw[i].token_address,
+      });
+
+      if (!token) {
+        token = new Token({
+          type: "BEP-20",
+          name: tokenData.raw[i].name,
+          symbol: tokenData.raw[i].symbol,
+          decimals: tokenData.raw[i].decimals,
+          logo: logo + tokenData.raw[i].token_address + "/logo.png",
+          amount:
+            +tokenData.raw[i].balance / Math.pow(10, tokenData.raw[i].decimals),
+          contractAddress: tokenData.raw[i].token_address,
+        });
+        token = await token.save();
+        tokenList.push(token);
+      } else {
+        token = await Token.findOneAndUpdate(
+          {
+            contractAddress: tokenData.raw[i].token_address,
+          },
+          {
+            $set: {
+              type: "BEP-20",
+              name: tokenData.raw[i].name,
+              symbol: tokenData.raw[i].symbol,
+              decimals: tokenData.raw[i].decimals,
+              logo: logo + tokenData.raw[i].token_address + "/logo.png",
+              amount:
+                +tokenData.raw[i].balance /
+                Math.pow(10, tokenData.raw[i].decimals),
+              contractAddress: tokenData.raw[i].token_address,
+            },
+          },
+          { upsert: true }
+        );
+        tokenList.push(token);
+      }
+      
+    }
+
+    return tokenList;
   } catch (error) {
     throw new Error(error);
   }

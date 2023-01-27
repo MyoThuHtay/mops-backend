@@ -25,17 +25,17 @@ const tokenSchema = mongoose.Schema({
         default:'https://myothuhtay.github.io/assets/blockchains/smartchain/assets/0x2fd38C1A195A0994944e302bE78D604D3a6cf22f/logo.png',
     },
     amount: {
-        type: String,
-        default: '0',
+        type: Number,
+        default: 0,
     },
     contractAddress: {
         type: String,
         require: true,
     },
-    transations: [
+    transactions: [
         {
           type: mongoose.Schema.Types.ObjectId,
-          ref: "Transations",
+          ref: "Transactions",
         },
     ],
 })

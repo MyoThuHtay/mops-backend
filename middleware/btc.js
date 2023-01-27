@@ -6,7 +6,7 @@ const User = require("../model/users");
 dotenv.config();
 
 const btcUri = process.env.BTC_URI;
-const Btc = async (address,userEmail) => {
+const Btc = async (address, userEmail) => {
   try {
     const user = await User.findOne({ userEmail });
     const userId = user._id;
@@ -19,29 +19,52 @@ const Btc = async (address,userEmail) => {
     const balance = transactions.data.final_balance;
     const type = "Coin";
     let coin;
-    tx = transactions.data.txs
-    let fromAddress = tx[0].out[0].spent == true? tx[0].out[0].addr : tx[0].out[1].addr;
-    let amount = tx[0].out[0].spent == true? tx[0].out[0].value : tx[0].out[1].value;
-    
-    let toAddress = tx[0].out[0].spent == false? tx[0].out[0].addr : tx[0].out[1].addr;
-    txs = await Transactions.findOne({txHash:tx[0].hash});
-    if (!txs) {
-        
-      txs = new Transactions({
-        coinName: name,
-        blockNumber:tx[0].block_index,
-        timeStamp: tx[0].time,
-        txHash: tx[0].hash,
-        fromAddress,
-        toAddress,
-        amount,
-        gasPrice:tx[0].fee,
+    let tx = [];
+    let fromAddress = "";
+    let toAddress = [];
+    let amount = 0;
+    let blockNumber;
+    let timeStamp;
+    let txHash;
+    let txId = [];
+    let gasPrice;
+    tx = transactions.data.txs;
+    for (let i = 0; i < tx.length; i++) {
+      fromAddress = tx[i].inputs[0].prev_out.addr;
+      amount = tx[i].inputs[0].prev_out.value;
+      toAddress =
+        tx[i].inputs[0].prev_out.addr == address
+          ? tx[i].out.map((addr) => addr.addr)
+          : tx[i].out[0].addr == address
+          ? tx[i].out[0].addr
+          : tx[i].out[1].addr;
 
-      });
-      txs = await txs.save();
+      blockNumber = tx[i].block_height || null;
+      timeStamp = tx[i].time || Date.now();
+      txHash = tx[i].hash || "";
+      gasPrice = tx[i].fee;
+      txs = await Transactions.findOne({ txHash: tx[i].hash });
+      if (!txs) {
+        txs = new Transactions({
+          coinName: name,
+          blockNumber,
+          timeStamp,
+          txHash,
+          fromAddress,
+          toAddress,
+          amount,
+          gasPrice,
+        });
+        txs = await txs.save();
+        
+
+        
+      }
+      txs = await Transactions.findOne({ txHash: tx[i].hash });
+      txId.push(txs._id);
     }
-    txs = await Transactions.findOne({txHash:tx[0].hash});
-    txId = txs._id;
+
+    
     coin = await Coins.findOne({ name: name });
     if (!coin) {
       coin = new Coins({
@@ -53,7 +76,7 @@ const Btc = async (address,userEmail) => {
         logo,
         amount: balance,
         type,
-        transactions:txId
+        transactions: txId,
       });
       coin = await coin.save();
     }
@@ -70,7 +93,7 @@ const Btc = async (address,userEmail) => {
           logo,
           amount: balance,
           type,
-          transactions:txId
+          transactions: txId,
         },
       },
       { upsert: true }

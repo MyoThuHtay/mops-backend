@@ -21,10 +21,10 @@ const transactions = mongoose.Schema({
         type:String,
         require:true,
     },
-    toAddress:{
+    toAddress:[{
         type:String,
         require:true,
-    },
+    }],
     amount:{
         type:Number,
         require:true,

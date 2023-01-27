@@ -26,7 +26,8 @@ const BscTokens = async (address, type) => {
           decimals: tokenData.raw[i].decimals,
           logo: logo + tokenData.raw[i].token_address + "/logo.png",
           amount:
-            +tokenData.raw[i].balance / Math.pow(10, tokenData.raw[i].decimals),
+            +tokenData.raw[i].balance,
+            // / Math.pow(10, tokenData.raw[i].decimals),
           contractAddress: tokenData.raw[i].token_address,
         });
         token = await token.save();
@@ -44,8 +45,8 @@ const BscTokens = async (address, type) => {
               decimals: tokenData.raw[i].decimals,
               logo: logo + tokenData.raw[i].token_address + "/logo.png",
               amount:
-                +tokenData.raw[i].balance /
-                Math.pow(10, tokenData.raw[i].decimals),
+                +tokenData.raw[i].balance ,
+                //Math.pow(10, tokenData.raw[i].decimals),
               contractAddress: tokenData.raw[i].token_address,
             },
           },

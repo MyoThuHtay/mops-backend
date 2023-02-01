@@ -105,6 +105,7 @@ dist
 
 # json files
 *.json
+admin.json
 
 # package-lock
 package-lock.json

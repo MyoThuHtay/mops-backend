@@ -22,7 +22,7 @@ coinRouter.get("/api/balance", async (req, res) => {
     if (!user) {
       return res.status(404).json({ msg: "User not found" });
     }
-    const userAddress = User.updateOne(
+    User.updateOne(
       { email: userEmail },
       {
         $set: {
@@ -31,12 +31,15 @@ coinRouter.get("/api/balance", async (req, res) => {
       },
       { upsert: true }
     );
-    console.log((await userAddress).matchedCount);
+    
     const BtcBalance = await Btc(btcAddress, userEmail);
     const ltcBalance = await Ltc(ltcAddress, userEmail);
     const Bscbalance = await Bsc(address, userEmail);
     const ethBalance = await Eth(address, userEmail);
     const polygonBalance = await Polygon(address, userEmail);
+    const bscToken = await BscTokens(address);
+    const ethToken = await EthToken(address);
+    const polygonToken = await PolygonTokens(address);
     res
       .status(200)
       .json({
@@ -45,6 +48,9 @@ coinRouter.get("/api/balance", async (req, res) => {
         Bscbalance,
         ethBalance,
         polygonBalance,
+        bscToken,
+        ethToken,
+        polygonToken,
       });
   } catch (error) {
     res.status(404).json({ message: error.message });

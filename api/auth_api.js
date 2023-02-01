@@ -49,7 +49,7 @@ authRouter.post('/api/signin', async (req, res) => {
         }
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
-            return res.status(400).json({ msg: "Incorret Password!" });
+            return res.status(400).json({ msg: "Incorrect Password!" });
         }
         const token = jwt.sign({ id: user._id }, "passwordKey");
         res.json({ token, ...user._doc })

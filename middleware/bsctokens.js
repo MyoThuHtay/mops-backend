@@ -3,7 +3,7 @@ const Token = require("../model/Token");
 
 const Moralis = require("moralis").default;
 
-const BscTokens = async (address, type) => {
+const BscTokens = async (address) => {
   const logo =
     "https://myothuhtay.github.io/assets/blockchains/smartchain/assets/";
   const chain = EvmChain.BSC;
@@ -13,50 +13,20 @@ const BscTokens = async (address, type) => {
       address,
       chain,
     });
-    for (let i = 0; i < tokenData.raw.length; i++) {
-      let token = await Token.findOne({
-        contractAddress: tokenData.raw[i].token_address,
-      });
 
-      if (!token) {
-        token = new Token({
+    tokenData.raw.map((token) =>
+      tokenList.push(
+        new Token({
           type: "BEP-20",
-          name: tokenData.raw[i].name,
-          symbol: tokenData.raw[i].symbol,
-          decimals: tokenData.raw[i].decimals,
-          logo: logo + tokenData.raw[i].token_address + "/logo.png",
-          amount:
-            +tokenData.raw[i].balance/Math.pow(10, tokenData.raw[i].decimals),
-            // / Math.pow(10, tokenData.raw[i].decimals),
-          contractAddress: tokenData.raw[i].token_address,
-        });
-        token = await token.save();
-        tokenList.push(token);
-      } else {
-        token = await Token.findOneAndUpdate(
-          {
-            contractAddress: tokenData.raw[i].token_address,
-          },
-          {
-            $set: {
-              type: "BEP-20",
-              name: tokenData.raw[i].name,
-              symbol: tokenData.raw[i].symbol,
-              decimals: tokenData.raw[i].decimals,
-              logo: logo + tokenData.raw[i].token_address + "/logo.png",
-              amount:
-                +tokenData.raw[i].balance/Math.pow(10, tokenData.raw[i].decimals) ,
-                //Math.pow(10, tokenData.raw[i].decimals),
-              contractAddress: tokenData.raw[i].token_address,
-            },
-          },
-          { upsert: true }
-        );
-        tokenList.push(token);
-      }
-      
-    }
-
+          name: token.name,
+          symbol: token.symbol,
+          decimals: token.decimals,
+          logo: logo + token.token_address + ".png",
+          amount: token.balance / Math.pow(10, token.decimals),
+          contractAddress: token.token_address,
+        })
+      )
+    );
     return tokenList;
   } catch (error) {
     throw new Error(error);

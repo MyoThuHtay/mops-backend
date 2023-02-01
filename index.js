@@ -8,7 +8,6 @@ const coinRouter = require("./api/coin_api");
 const Transactions = require("./api/transaction");
 const PORT = process.env.PORT || 3000;
 const app = express();
-const {db} = require("./firebase");
 const DB = process.env.DB ;
 
 app.use(express.json());

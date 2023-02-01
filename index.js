@@ -8,7 +8,6 @@ const coinRouter = require("./api/coin_api");
 const Transactions = require("./api/transaction");
 const PORT = process.env.PORT || 3000;
 const app = express();
-const {db} = require("./firebase");
 const DB = process.env.DB ;
 
 app.use(express.json());
@@ -24,6 +23,8 @@ const startServer = async () => {
   .catch((e) => {
     console.log(e);
   });
+};
+startServer();
   mongoose.set("strictQuery", true);
   mongoose
     .connect(DB)
@@ -37,5 +38,4 @@ const startServer = async () => {
   app.listen(PORT, "0.0.0.0", () => {
     console.log(`connected at port ${PORT}`);
   });
-};
-startServer();
+

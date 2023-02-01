@@ -5,12 +5,13 @@ const User = require('../model/users');
 dotenv.config();
 
 const ltcUri = process.env.LTC_URI;
+const api = process.env.CHAINZ_API;
 const Ltc = async (address,userEmail) => {
 
     try {
         const user = await User.findOne({ userEmail });
         const userId = user._id;
-        const transactions = await axios.get(`${ltcUri}${address}`);
+        const transactions = await axios.get(`${ltcUri}${address}&key=${api}`);
         const name = "Litecoin";
         const symbol = "LTC";
         const decimals = "8";

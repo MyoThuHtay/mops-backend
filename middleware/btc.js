@@ -35,9 +35,7 @@ const Btc = async (address, userEmail) => {
       toAddress =
         tx[i].inputs[0].prev_out.addr == address
           ? tx[i].out.map((addr) => addr.addr)
-          : tx[i].out[0].addr == address
-          ? tx[i].out[0].addr
-          : tx[i].out[1].addr;
+          : address;
 
       blockNumber = tx[i].block_height || null;
       timeStamp = tx[i].time || Date.now();

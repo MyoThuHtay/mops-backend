@@ -21,7 +21,7 @@ const PolygonTokens = async (address, type) => {
           name: token.name,
           symbol: token.symbol,
           decimals: token.decimals,
-          logo: logo + token.token_address + ".png",
+          logo: logo + eip55.encode(token.token_address) + ".png",
           amount: token.balance / Math.pow(10, token.decimals),
           contractAddress: eip55.encode(token.token_address),
         })

@@ -1,6 +1,6 @@
 const { EvmChain } = require("@moralisweb3/common-evm-utils/lib");
 const Token = require("../model/Token");
-
+const eip55 = require('eip55')
 const Moralis = require("moralis").default;
 
 const EthToken = async (address,type) => {
@@ -20,9 +20,9 @@ const EthToken = async (address,type) => {
           name: token.name,
           symbol: token.symbol,
           decimals: token.decimals,
-          logo: logo + token.token_address + ".png",
+          logo: logo + eip55.encode(token.token_address) + "/logo.png",
           amount: token.balance / Math.pow(10, token.decimals),
-          contractAddress: token.token_address,
+          contractAddress: eip55.encode(token.token_address),
         })
       )
     );

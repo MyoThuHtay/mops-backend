@@ -42,7 +42,7 @@ dotenv.config();
 
 // })
 
-transactions.get('transactions', async (req, res) => {
+transactions.get('/api/transactions', async (req, res) => {
     const contractaddress = req.query.contractaddress;
     const address = req.query.address;
     const apikey = process.env.BSC_SCAN_API_KEY;
@@ -61,7 +61,7 @@ transactions.get('transactions', async (req, res) => {
     }
 });
 
-transactions.get('ethereumTransactions', async (req, res) => {
+transactions.get('/api/ethereumTransactions', async (req, res) => {
     const address = req.query.address;
     const apikey = process.env.ETHER_SCAN_API;
     const ethTransactionsUri = `https://api.etherscan.io/api?module=account&action=txlist&address=${address}&startblock=0&endblock=99999999&page=1&offset=10&sort=asc&apikey=${apikey}`;

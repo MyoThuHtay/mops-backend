@@ -118,7 +118,7 @@ transactions.get('/api/polygonTransactions', async (req, res) => {
     const contractaddress = req.query.contractaddress;
     const address = req.query.address;
     const apikey = process.env.POLYGON_SCAN_API;
-    const uri = `https://api.polygon.com/api?module=account&action=tokentx&contractaddress=${contractaddress}&address=${address}&page=1&offset=latest&startblock=0&endblock=999999999&sort=dsc&apikey=${apikey}`;
+    const uri = `https://api.polygonscan.com/api?module=account&action=tokentx&contractaddress=${contractaddress}&address=${address}&startblock=0&endblock=99999999&page=1&offset=latest&sort=asc&apikey=${apikey}`;
     try {
         const transactions = await axios.get(uri);
         console.log(transactions.status);

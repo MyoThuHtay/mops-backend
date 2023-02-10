@@ -100,7 +100,7 @@ transactions.get('/api/ethTransactions', async (req, res) => {
 transactions.get('/api/maticTransactions', async (req, res) => {
     const address = req.query.address;
     const apikey = process.env.POLYGON_SCAN_API;
-    const maticTransactionsUri = `https://api.polygon.com/api?module=account&action=txlist&address=${address}&startblock=0&endblock=99999999&page=1&offset=10&sort=asc&apikey=${apikey}`;
+    const maticTransactionsUri = `https://api.polygonscan.com/api?module=account&action=txlist&address=${address}&startblock=0&endblock=99999999&page=1&offset=10&sort=asc&apikey=${apikey}`;
     try {
         const transactions = await axios.get(maticTransactionsUri);
         if (transactions.status !== 200) {

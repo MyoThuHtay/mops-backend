@@ -23,24 +23,24 @@ dotenv.config();
 
 // })
 
-// transactions.get('ltcTransactions', async (req, res) => {
-//     const address = req.query.address;
+transactions.get('/api/bsctransactions', async (req, res) => {
     
-//     const ltcTransactionsUri = process.env.LTC_URI;
-//     try {
-//         const transactions = await axios.get(`${ltcTransactionsUri}${address}`);
-//         if (transactions.status !== 200) {
-//             res.status(transactions.status).json({
-//                 message: "error"
-//             });
-//         }
-//     res.status(200).json(transactions.data);
-        
-//     } catch (error) {
-//         res.status(400).send(error.message);
-//     }
-
-// })
+    const address = req.query.address;
+    const apikey = process.env.BSC_SCAN_API_KEY;
+    const uri = `https://api.bscscan.com/api?module=account&action=txlist&address=${address}&startblock=0&endblock=99999999&page=1&offset=10&sort=asc&apikey=${apikey}`;
+    try {
+        const transactions = await axios.get(uri);
+        console.log(transactions.status);
+        if (transactions.status !== 200) {
+            res.status(transactions.status).json({
+                message: "error"
+            });
+        }
+        res.status(200).json(transactions.data.result);
+    } catch (error) {
+        res.status(400).send(error.message);
+    }
+});
 
 transactions.get('/api/transactions', async (req, res) => {
     const contractaddress = req.query.contractaddress;
